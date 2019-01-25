@@ -12,7 +12,7 @@
 
 	$foo = new Monitor();
 	$table = $foo->getTable(3600);
-	
+
 	if ($table['isStale'] && count($table['recipients']) > 0) {
 		$mail = new PHPMailer();
 		$mail->From = 'no-reply@calacademy.org';

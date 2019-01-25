@@ -2,7 +2,7 @@
 
 date_default_timezone_set('America/Los_Angeles');
 
-$includePath = dirname(__FILE__) . '/../include/';
+$includePath = dirname(__FILE__) . '/../../../include/php/';
 require_once($includePath . 'DatabaseUtil.php');
 require_once($includePath . 'StringUtil.php');
 require_once($includePath . 'phpmailer/class.phpmailer.php');
