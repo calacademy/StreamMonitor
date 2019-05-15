@@ -1,3 +1,5 @@
+**Note:** This repo also contains the Farallones cam control backend code (ported from legacy)
+
 Current status…
 
 https://utility.calacademy.org/webcams/monitor/?view=1

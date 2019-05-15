@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Farallones Web Cam: Kill</title>
+	
+	<script src="../js/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/jquery.jsonp-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/validationutil.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/killcontrol.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../css/kill.css" type="text/css" charset="utf-8" />
+	
+</head>
+
+	<body>
+
+		<form action="#" method="post">
+			<input type="hidden" name="uid_cam" id="uid_cam" value="1" />
+			
+			<label for="minutes">Kill control for</label>
+			
+			<select id="minutes" name="minutes">
+				<option value="">-</option>
+				<option value="1">1 minute</option>
+				<option value="3">3 minutes</option>
+				<option value="5">5 minutes</option>
+				<option value="10">10 minutes</option>
+				<option value="30">30 minutes</option>
+				<option value="60">1 hour</option>
+				<option value="120">2 hours</option>
+				<option value="180">3 hours</option>
+				<option value="10080">1 week</option>
+			</select>
+			
+			<input type="submit" name="submit" id="submit" value="Submit" />
+			<p id="processing">Processing. Please wait&hellip;</p>
+			
+		</form>
+
+	</body>
+</html>
