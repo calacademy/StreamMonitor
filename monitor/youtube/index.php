@@ -77,7 +77,12 @@
 				if ($clientValid && $streamValid) {
 					// send pulse
 					print 'pulse ' . $stream['snippet']['title'] . '<br />';
-					$monitor->pulseYouTube($stream['snippet']['title']);
+
+					if ($youtube->isValidHLS($youTubeId, true)) {
+						$monitor->pulseYouTube($stream['snippet']['title']);
+					} else {
+						print 'HLS validation for <strong>' . $stream['snippet']['title'] . '</strong> failed!<br />';
+					}
 				} else {
 					print '<strong>' . $stream['snippet']['title'] . ' is not valid</strong>';
 					echo '<pre>';

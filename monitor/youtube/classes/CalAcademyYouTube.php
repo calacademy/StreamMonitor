@@ -9,6 +9,8 @@ require_once 'Google/Service/YouTube.php';
 class CalAcademyYouTube {
   private $_client;
   private $_service;
+  private $_configUrl = 'https://s3.amazonaws.com/data.calacademy.org/penguins/data.json';
+  private $_config = false;
 
   public function __construct () {
   	require('/private/globalVars.php');
@@ -21,6 +23,37 @@ class CalAcademyYouTube {
 	$this->_client->refreshToken($youTubeCredentials['refresh_token']);
 
 	$this->_service = new Google_Service_YouTube($this->_client);
+	$this->_setConfig();
+  }
+
+  private function _setConfig () {
+  	$str = @file_get_contents($this->_configUrl);
+  	if (!$str) return;
+
+  	$json = json_decode($str, true);
+  	if (is_null($json)) return;
+
+  	if (empty($json['endpoint'])) return;
+  	if (empty($json['key'])) return;
+
+  	$this->_config = $json;
+  }
+
+  public function isValidHLS ($id, $debug = false) {
+  	if (!$this->_config) return false;
+
+  	$url = $this->_config['endpoint'] . '=' . $id;
+  	$str = @file_get_contents($url);
+  	if (!$str) return false;
+
+  	parse_str($str, $output);
+  	
+    if (is_string($output[$this->_config['key']])) {
+      if ($debug) echo $output[$this->_config['key']] . '<hr />';
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public function getLiveStreams () {
