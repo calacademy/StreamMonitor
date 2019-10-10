@@ -11,7 +11,7 @@
 	header('Pragma: no-cache');
 
 	$foo = new Monitor();
-	$table = $foo->getTable(3600);
+	$table = $foo->getTable(5500);
 
 	if ($table['isStale'] && count($table['recipients']) > 0) {
 		$mail = new PHPMailer();
