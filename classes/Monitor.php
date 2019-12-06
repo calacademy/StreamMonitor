@@ -222,7 +222,7 @@
 				$uri = $row['server'] . $row['stream'] . $row['level'];
 
 				if ($row['youtube']) {
-					$uri = "<a style='text-decoration: underline; color: {$link};' href='{$uri}?autoplay=1'>$uri</a>";
+					$uri = "<a class='youtube' style='text-decoration: underline; color: {$link};' href='{$uri}?autoplay=1'>$uri</a>";
 				} else {
 					$uri = "<a style='text-decoration: underline; color: {$link};' href='{$uri}'>$uri</a>";
 				}
@@ -236,7 +236,7 @@
 				$recipientList .= '<ul>';
 
 				$html .= <<<end
-				<tr style="color: {$font}; background-color: {$bg};">
+				<tr id="{$row['stream']}" style="color: {$font}; background-color: {$bg};">
 					<td>{$row['title']}</td>
 					<td>{$uri}</td>
 					<td>{$recipientList}</td>

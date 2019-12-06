@@ -39,12 +39,14 @@ class CalAcademyYouTube {
   	$this->_config = $json;
   }
 
-  public function isValidHLS ($id, $debug = false) {
+  public function isValidHLS ($id, $debug = false, $returnOutput = false) {
   	if (!$this->_config) return false;
 
   	$url = $this->_config['endpoint'] . '=' . $id;
   	$str = @file_get_contents($url);
   	if (!$str) return false;
+
+    if ($returnOutput) return $str;
 
   	parse_str($str, $output);
   	
@@ -54,6 +56,13 @@ class CalAcademyYouTube {
     } else {
       return false;
     }
+  }
+
+  public function getHLS ($id) {
+    $output = $this->isValidHLS($id, false, true);
+    if ($output === false) $output = 'false';
+    
+    return $output;
   }
 
   public function getLiveStreams () {

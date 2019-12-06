@@ -18,7 +18,68 @@
 	} else {
 		if (intval($_REQUEST['view']) == 1) {
 			$table = $foo->getTable();
-			echo $table['html'];
+			
+			print <<<END
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>CalAcademy Stream Monitor</title>
+		<meta charset="UTF-8"/>
+
+		<link rel="shortcut icon" href="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+		<script>
+
+			var _onHLSData = function (data) {
+				for (var id in data) {
+					var hls = data[id];
+					var td = $('#' + id).find('td').last();
+					
+					td.css('word-break', 'break-all');
+					td.html(hls);
+				}
+			}
+
+			$(document).ready(function () {
+				// get YouTube ids
+				var ids = [];
+
+				$('.youtube').each(function () {
+					var tr = $(this).closest('tr');
+
+					if (tr.attr('id')) {
+						ids.push($.trim(tr.attr('id')));
+						tr.append('<td>-</td>');
+					}
+				});
+
+				if (ids.length == 0) return;
+
+				// append header cell
+				$('tr').eq(0).append('<th>HLS Manifest</th>');
+
+				// get HLS data
+				$.getJSON('ajax/', {
+					ids: ids.join(',')
+				}, _onHLSData);
+			});
+
+		</script>
+	</head>
+
+	<body>
+		
+		{$table['html']}
+
+	</body>
+</html>
+
+END;
+
+
 		} else {
 			echo $foo->getStreams();	
 		}
