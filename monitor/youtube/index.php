@@ -6,7 +6,6 @@
 
 	$youtube = new CalAcademyYouTube();
 	$streams = $youtube->getLiveStreams();
-	$streams = $streams["\0*\0modelData"]['items'];
 
 	if (!empty($streams)) {
 		$monitor = new Monitor();
@@ -24,7 +23,6 @@
 		}
 
 		$broadcasts = $youtube->getLiveBroadcasts(implode(',', $streamLookup));
-		$broadcasts = $broadcasts["\0*\0modelData"]['items'];
 
 		// create a lookup for youtube ids / broadcast status
 		$broadcastStatus = array();

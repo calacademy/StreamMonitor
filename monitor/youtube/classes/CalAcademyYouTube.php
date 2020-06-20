@@ -13,17 +13,17 @@ class CalAcademyYouTube {
   private $_config = false;
 
   public function __construct () {
-  	require('/private/globalVars.php');
+    require('/private/globalVars.php');
 
-	$this->_client = new Google_Client();
-	$this->_client->setClientId($youTubeCredentials['client_id']);
-	$this->_client->setClientSecret($youTubeCredentials['client_secret']);
-	$this->_client->setScopes('https://www.googleapis.com/auth/youtube.readonly');
-	$this->_client->setAccessType('offline');
-	$this->_client->refreshToken($youTubeCredentials['refresh_token']);
+    $this->_client = new Google_Client();
+    $this->_client->setClientId($youTubeCredentials['client_id']);
+    $this->_client->setClientSecret($youTubeCredentials['client_secret']);
+    $this->_client->setScopes('https://www.googleapis.com/auth/youtube.readonly');
+    $this->_client->setAccessType('offline');
+    $this->_client->refreshToken($youTubeCredentials['refresh_token']);
 
-	$this->_service = new Google_Service_YouTube($this->_client);
-	$this->_setConfig();
+    $this->_service = new Google_Service_YouTube($this->_client);
+    $this->_setConfig();
   }
 
   private function _setConfig () {
@@ -65,24 +65,54 @@ class CalAcademyYouTube {
     return $output;
   }
 
-  public function getLiveStreams () {
-	return (array) $this->_service->liveStreams->listLiveStreams(
-		'snippet,status',
-		array(
-			'mine' => true,
-			'maxResults' => 50
-		)
-	);
+  public function getLiveStreams ($items = array(), $pageToken = '') {
+    $params = array(
+      'mine' => true,
+      'maxResults' => 50
+    );
+
+    if (!empty($pageToken)) {
+      $params['pageToken'] = $pageToken;
+    }
+
+    $arr = (array) $this->_service->liveStreams->listLiveStreams(
+      'snippet,status',
+      $params
+    );
+
+    // concatenate
+    $items = array_merge($items, $arr["\0*\0modelData"]['items']);
+
+    // done with pagination
+    if (empty($arr['nextPageToken'])) return $items;
+
+    // get next page
+    return $this->getLiveStreams($items, $arr['nextPageToken']);
   }
 
-  public function  getLiveBroadcasts ($ids) {
-  	return (array) $this->_service->liveBroadcasts->listLiveBroadcasts(
-		'id,snippet,contentDetails,status',
-		array(
-			'id' => $ids,
-			'maxResults' => 50
-		)
-	);
+  public function getLiveBroadcasts ($ids, $items = array(), $pageToken = '') {
+    $params = array(
+      'id' => $ids,
+      'maxResults' => 50
+    );
+    
+    if (!empty($pageToken)) {
+      $params['pageToken'] = $pageToken;
+    }
+
+    $arr = (array) $this->_service->liveBroadcasts->listLiveBroadcasts(
+      'id,snippet,contentDetails,status',
+      $params
+    );
+
+    // concatenate
+    $items = array_merge($items, $arr["\0*\0modelData"]['items']);
+
+    // done with pagination
+    if (empty($arr['nextPageToken'])) return $items;
+
+    // get next page
+    return $this->getLiveBroadcasts($ids, $items, $arr['nextPageToken']);
   }
 }
 
