@@ -92,7 +92,8 @@ class CalAcademyYouTube {
 
   public function getLiveBroadcasts ($ids, $items = array(), $pageToken = '') {
     $params = array(
-      'id' => $ids,
+      // 'id' => $ids,
+      'broadcastStatus' => 'active',
       'maxResults' => 50
     );
     
@@ -100,10 +101,16 @@ class CalAcademyYouTube {
       $params['pageToken'] = $pageToken;
     }
 
-    $arr = (array) $this->_service->liveBroadcasts->listLiveBroadcasts(
-      'id,snippet,contentDetails,status',
-      $params
-    );
+    try {
+      $arr = (array) $this->_service->liveBroadcasts->listLiveBroadcasts(
+        'id,snippet,contentDetails,status',
+        $params
+      );
+    } catch (Google_Service_Exception $e) {
+      echo $e->getMessage();
+    } catch (Google_Exception $e) {
+      echo $e->getMessage();
+    }
 
     // concatenate
     $items = array_merge($items, $arr["\0*\0modelData"]['items']);
